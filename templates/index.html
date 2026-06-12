@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%234f46e5'/%3E%3Cstop offset='1' stop-color='%237c3aed'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Cpath d='M18 39c5-10 9-15 14-15s9 5 14 15' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M22 26c2-6 6-10 10-10s8 4 10 10' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' opacity='.9'/%3E%3Ccircle cx='32' cy='43' r='4' fill='white'/%3E%3C/svg%3E">
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .soft-card {
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+      will-change: transform;
+      border-radius: 1.5rem;
+      overflow: hidden;
+    }
+
+    .soft-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.10);
+      border-color: rgba(99, 102, 241, 0.25);
+    }
+
+    .soft-link {
+      transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+
+    .hero-gradient {
+      color: transparent;
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .blue-highlight {
+      color: #3730a3;
+      font-weight: 700;
+      text-shadow: 0 1px 18px rgba(79, 70, 229, 0.14);
+    }
+
+    .soft-link:hover {
+      transform: translateY(-2px);
+    }
+
+    .brand-mark {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.25rem;
+      bottom: 1.25rem;
+      z-index: 50;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 9999px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 15px 40px rgba(15, 23, 42, 0.18);
+      transition: transform 180ms ease, opacity 180ms ease, background-color 180ms ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      background-color: #4338ca;
+      transform: translateY(-2px);
+    }
+  </style>
+
+  <title>Loan Prediction</title>
+</head>
+
+<body>
+
+  <!-- This example requires Tailwind CSS v2.0+ -->
+  <div class="relative bg-white overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+      <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+        <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
+          fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <polygon points="50,0 100,0 50,100 0,100" />
+        </svg>
+
+        <div class="relative pt-6 px-4 sm:px-6 lg:px-8">
+          <nav class="relative flex items-center justify-between sm:h-10 lg:justify-start" aria-label="Global">
+            <div class="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
+              <div class="flex items-center justify-between w-full md:w-auto">
+                <a href="#home" class="flex items-center gap-3">
+                  <span class="sr-only">Workflow</span>
+                  <div
+                    class="brand-mark h-10 w-10 rounded-2xl text-white flex items-center justify-center shadow-lg font-extrabold text-lg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M4 15c3.2-6.4 5.9-9.6 8-9.6S16.8 8.6 20 15" stroke="white" stroke-width="1.9"
+                        stroke-linecap="round" />
+                      <path d="M7 10.5c1.2-3 3-4.7 5-4.7s3.8 1.7 5 4.7" stroke="white" stroke-width="1.9"
+                        stroke-linecap="round" opacity="0.9" />
+                    </svg>
+                  </div>
+                  <div class="hidden sm:block leading-tight">
+                    <div class="text-sm font-semibold text-gray-900">Loan Prediction</div>
+                    <div class="text-xs text-gray-500">Machine Learning</div>
+                  </div>
+                </a>
+                <div class="-mr-2 flex items-center md:hidden">
+                  <button type="button"
+                    class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                    aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <!-- Heroicon name: outline/menu -->
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
+              <a href="#home" class="font-medium text-gray-500 hover:text-gray-900">Home</a>
+
+              <a href="#about" class="font-medium text-gray-500 hover:text-gray-900">About us</a>
+
+              <a href="#contact" class="font-medium text-gray-500 hover:text-gray-900">Contact</a>
+
+              <a href="#members" class="font-medium text-gray-500 hover:text-gray-900">Members</a>
+
+            </div>
+          </nav>
+        </div>
+
+        <!--
+        Mobile menu, show/hide based on menu open state.
+
+        Entering: "duration-150 ease-out"
+          From: "opacity-0 scale-95"
+          To: "opacity-100 scale-100"
+        Leaving: "duration-100 ease-in"
+          From: "opacity-100 scale-100"
+          To: "opacity-0 scale-95"
+      -->
+        <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
+          <div class="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
+            <div class="px-5 pt-4 flex items-center justify-between">
+              <div>
+                <div
+                  class="brand-mark h-10 w-10 rounded-2xl text-white flex items-center justify-center shadow-lg font-extrabold text-lg">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 15c3.2-6.4 5.9-9.6 8-9.6S16.8 8.6 20 15" stroke="white" stroke-width="1.9"
+                      stroke-linecap="round" />
+                    <path d="M7 10.5c1.2-3 3-4.7 5-4.7s3.8 1.7 5 4.7" stroke="white" stroke-width="1.9"
+                      stroke-linecap="round" opacity="0.9" />
+                  </svg>
+                </div>
+              </div>
+              <div class="-mr-2">
+                <button type="button"
+                  class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <span class="sr-only">Close main menu</span>
+                  <!-- Heroicon name: outline/x -->
+                  <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="px-2 pt-2 pb-3 space-y-1">
+              <a href="#home"
+                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Home</a>
+
+              <a href="#about"
+                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">About
+                us</a>
+
+              <a href="#contact"
+                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Contact</a>
+
+              <a href="#members"
+                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Members</a>
+            </div>
+
+          </div>
+        </div>
+
+        <main id="home" class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+          <div class="sm:text-center lg:text-left">
+            <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+              <span class="block xl:inline">Loan Prediction</span>
+              <span class="block hero-gradient xl:inline">Machine Learning</span>
+            </h1>
+            <p
+              class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi ad perspiciatis dolores, deleniti culpa
+              odit dolorem harum dolore ex amet.
+            </p>
+            <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+              <div class="rounded-md shadow">
+                <a href="./predict"
+                  class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition duration-200 ease-out hover:scale-[1.02]">
+                  Prediction
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+      <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
+        src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80"
+        alt="">
+    </div>
+  </div>
+
+  <section id="about" class="bg-gray-50 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto text-center">
+        <p class="text-xs font-semibold tracking-wide blue-highlight uppercase">About</p>
+        <h2 class="mt-2 text-2xl sm:text-3xl font-bold text-gray-900">Why Choose Our Solution</h2>
+        <p class="mt-3 text-sm text-gray-600 max-w-3xl mx-auto">
+          Leveraging machine learning to assess loan approval risk through financial data, behavioral patterns, and
+          credit indicators. Fast, reliable screening for better decisions.
+        </p>
+
+        <div class="mt-12 grid gap-4 sm:grid-cols-3 text-left">
+          <!-- Accurate Prediction Card -->
+          <div class="soft-card rounded-lg bg-white border border-gray-200 p-3 sm:p-4 shadow-sm">
+            <div class="text-2xl mb-2 font-bold">Check</div>
+            <p class="text-xs font-semibold text-indigo-600 uppercase">Accurate Predictions</p>
+            <p class="mt-1 text-gray-600 text-xs">Machine learning model providing accurate and reliable predictions.
+            </p>
+          </div>
+
+          <!-- ML Powered Card -->
+          <div class="soft-card rounded-lg bg-white border border-gray-200 p-3 sm:p-4 shadow-sm">
+            <div class="text-2xl mb-2 font-bold">AI</div>
+            <p class="text-xs font-semibold text-indigo-600 uppercase">AI Powered</p>
+            <p class="mt-1 text-gray-600 text-xs">Analyzes 24 financial and personal features for comprehensive
+              evaluation.</p>
+          </div>
+
+          <!-- Fast Decision Card -->
+          <div class="soft-card rounded-lg bg-white border border-gray-200 p-3 sm:p-4 shadow-sm">
+            <div class="text-2xl mb-2 font-bold">Fast</div>
+            <p class="text-xs font-semibold text-indigo-600 uppercase">Fast Decision</p>
+            <p class="mt-1 text-gray-600 text-xs">Get instant decisions in seconds with real-time processing.</p>
+          </div>
+        </div>
+
+        <!-- Dataset Information -->
+        <div class="mt-10 grid gap-4 sm:grid-cols-3">
+          <div class="rounded-lg bg-white border border-gray-200 p-3 sm:p-4 shadow-sm text-center">
+            <p class="text-2xl font-bold text-indigo-600">5000+</p>
+            <p class="mt-1 text-xs text-gray-600">Dataset Size</p>
+          </div>
+          <div class="rounded-lg bg-white border border-gray-200 p-3 sm:p-4 shadow-sm text-center">
+            <p class="text-2xl font-bold text-indigo-600">24</p>
+            <p class="mt-1 text-xs text-gray-600">Feature Count</p>
+          </div>
+          <div class="rounded-lg bg-white border border-gray-200 p-3 sm:p-4 shadow-sm text-center">
+            <p class="text-2xl font-bold text-indigo-600">89%</p>
+            <p class="mt-1 text-xs text-gray-600">Model Accuracy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prediction Statistics Section -->
+  <section class="bg-white py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto text-center">
+        <p class="text-sm font-semibold tracking-wide blue-highlight uppercase">Model Performance</p>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-gray-900">Prediction Statistics</h2>
+      </div>
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-3">
+        <div class="soft-card rounded-lg bg-indigo-50 border border-indigo-100 p-4 sm:p-5 text-center">
+          <p class="text-2xl font-bold text-indigo-600">24</p>
+          <p class="mt-1 text-xs font-semibold text-gray-900">Analyzed Features</p>
+          <p class="mt-0.5 text-xs text-gray-600">Financial & Personal Data</p>
+        </div>
+        <div class="soft-card rounded-lg bg-indigo-50 border border-indigo-100 p-4 sm:p-5 text-center">
+          <p class="text-2xl font-bold text-green-600">95%</p>
+          <p class="mt-1 text-xs font-semibold text-gray-900">Accuracy</p>
+          <p class="mt-0.5 text-xs text-gray-600">Approved Predictions</p>
+        </div>
+        <div class="soft-card rounded-lg bg-indigo-50 border border-indigo-100 p-4 sm:p-5 text-center">
+          <p class="text-2xl font-bold text-purple-600">AI</p>
+          <p class="mt-1 text-xs font-semibold text-gray-900">AI Powered</p>
+          <p class="mt-0.5 text-xs text-gray-600">Random Forest</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Model Details Section -->
+  <section class="bg-gray-50 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto">
+        <p class="text-sm font-semibold tracking-wide blue-highlight uppercase text-center">Technical Details</p>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-gray-900 text-center">Model Features</h2>
+
+        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-semibold text-gray-600 uppercase">Algorithm</p>
+            <p class="mt-2 text-sm font-bold text-gray-900">Random Forest</p>
+            <p class="mt-0.5 text-xs text-gray-600">Ensemble Learning</p>
+          </div>
+          <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-semibold text-gray-600 uppercase">Accuracy</p>
+            <p class="mt-2 text-sm font-bold text-gray-900">89%</p>
+            <p class="mt-0.5 text-xs text-gray-600">Overall Accuracy</p>
+          </div>
+          <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-semibold text-gray-600 uppercase">Precision</p>
+            <p class="mt-2 text-sm font-bold text-gray-900">87%</p>
+            <p class="mt-0.5 text-xs text-gray-600">Approval Prediction</p>
+          </div>
+          <div class="rounded-lg bg-white border border-gray-200 p-4 shadow-sm">
+            <p class="text-xs font-semibold text-gray-600 uppercase">Recall</p>
+            <p class="mt-2 text-sm font-bold text-gray-900">85%</p>
+            <p class="mt-0.5 text-xs text-gray-600">True Positive Rate</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="members" class="bg-white py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-end justify-center gap-4 flex-wrap text-center">
+        <div class="max-w-3xl mx-auto">
+          <p class="text-sm font-semibold tracking-wide blue-highlight uppercase">Members</p>
+          <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-gray-900">Project team</h2>
+        </div>
+      </div>
+
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        <div class="soft-card rounded-lg border border-gray-200 p-3.5 sm:p-4 shadow-sm bg-white">
+          <div
+            class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+            @SaifullaTanim
+          </div>
+          <h3 class="mt-4 text-lg font-bold text-gray-900">Saifulla Tanim</h3>
+          <p class="mt-2 text-gray-600">Developer and project contributor.</p>
+          <div class="mt-5 flex flex-wrap gap-3 text-sm">
+            <a class="soft-link rounded-full bg-white px-4 py-2 text-indigo-600 border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50"
+              href="https://github.com/saifullahtanim" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="soft-link rounded-full bg-white px-4 py-2 text-indigo-600 border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50"
+              href="https://saifullatanim.me" target="_blank" rel="noreferrer">Portfolio</a>
+            <a class="soft-link rounded-full bg-white px-4 py-2 text-indigo-600 border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50"
+              href="https://www.linkedin.com/in/saifullahtanim/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a class="soft-link rounded-full bg-white px-4 py-2 text-red-600 border border-red-100 hover:border-red-300 hover:bg-red-50"
+              href="mailto:hello.tanim.bd@gmail.com" title="Email">
+              <span>Email</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="soft-card rounded-lg border border-gray-200 p-3.5 sm:p-4 shadow-sm bg-white">
+          <div
+            class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+            @MimAkter
+          </div>
+          <h3 class="mt-4 text-lg font-bold text-gray-900">Mim Akter</h3>
+          <p class="mt-2 text-gray-600">Developer and project contributor.</p>
+          <div class="mt-5 flex flex-wrap gap-3 text-sm">
+            <a class="soft-link rounded-full bg-white px-4 py-2 text-indigo-600 border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50"
+              href="https://github.com/mimAkter31/" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="soft-link rounded-full bg-white px-4 py-2 text-indigo-600 border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50"
+              href="https://mimakter.tech/" target="_blank" rel="noreferrer">Portfolio</a>
+            <a class="soft-link rounded-full bg-white px-4 py-2 text-indigo-600 border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50"
+              href="https://www.linkedin.com/in/mimakter31/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a class="soft-link rounded-full bg-white px-4 py-2 text-red-600 border border-red-100 hover:border-red-300 hover:bg-red-50"
+              href="mailto:mimakter.de@gmail.com" title="Email">
+              <span>Email</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="bg-gray-50 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-2 items-start">
+        <div class="lg:pt-4">
+          <p class="text-sm font-semibold tracking-wide blue-highlight uppercase">Contact us</p>
+          <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-gray-900">Get in touch</h2>
+          <p class="mt-4 text-lg text-gray-600 max-w-xl">
+            Have any questions? We&rsquo;d love to hear from you. Reach out anytime and we&rsquo;ll respond as quickly
+            as possible.
+          </p>
+
+          <div class="soft-card mt-8 rounded-2xl border border-gray-200 bg-white shadow-sm p-4 sm:p-5 max-w-sm">
+            <p class="text-sm font-semibold text-gray-900">Contact Information</p>
+            <div class="mt-3 space-y-3 text-sm text-gray-600">
+              <p class="flex items-center gap-2">
+                <span class="font-semibold text-gray-900">Primary Email:</span>
+                <a href="mailto:mimakter.de@gmail.com" class="text-indigo-600 hover:underline">mimakter.de@gmail.com</a>
+              </p>
+              <p class="flex items-center gap-2">
+                <span class="font-semibold text-gray-900">Secondary Email:</span>
+                <a href="mailto:hello.tanim.bd@gmail.com"
+                  class="text-indigo-600 hover:underline">hello.tanim.bd@gmail.com</a>
+              </p>
+              <p class="flex items-center gap-2">
+                <span class="font-semibold text-gray-900">Response Time:</span> Within 24 hours
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="soft-card rounded-2xl bg-white border border-gray-200 shadow-sm p-5 sm:p-6 lg:p-7 max-w-2xl lg:ml-auto">
+          <form id="contactForm" class="space-y-5">
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2" for="first_name">First Name</label>
+                <input id="first_name" name="first_name" type="text"
+                  class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-indigo-500"
+                  placeholder="John" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2" for="last_name">Last Name</label>
+                <input id="last_name" name="last_name" type="text"
+                  class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-indigo-500"
+                  placeholder="Doe" required>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2" for="email">Email Address</label>
+              <input id="email" name="email" type="email"
+                class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-indigo-500"
+                placeholder="john@example.com" required>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2" for="message">Message</label>
+              <textarea id="message" name="message" rows="5"
+                class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-indigo-500 focus:ring-indigo-500"
+                placeholder="Your message here..." required></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn"
+              class="w-full rounded-lg bg-indigo-600 px-6 py-3 text-white font-semibold hover:bg-indigo-700 transition">
+              Send Message
+            </button>
+
+            <div id="formMessage" class="hidden p-4 rounded-lg text-center font-medium"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-white border-t border-gray-200">
+    <div
+      class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-center sm:text-left">
+      <p class="text-sm text-gray-600">Loan Prediction Machine Learning</p>
+      <p class="text-sm text-gray-600">Designed and developed by @SaifullaTanim and @MimAkter</p>
+    </div>
+  </footer>
+
+
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    Top
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+    crossorigin="anonymous"></script>
+
+  <script>
+    const backToTopBtn = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 360) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function (event) {
+          const targetId = this.getAttribute('href');
+
+          if (!targetId || targetId === '#' || targetId === '#0') {
+            return;
+          }
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            event.preventDefault();
+            if (targetId === '#home') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        });
+      });
+    });
+
+    document.getElementById('contactForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const formMessage = document.getElementById('formMessage');
+      const form = this;
+
+      // Disable button and show loading
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      formMessage.classList.add('hidden');
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch('/contact', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          formMessage.className = 'bg-green-50 text-green-700 border border-green-200';
+          formMessage.textContent = 'Success: ' + result.message;
+          form.reset();
+        } else {
+          formMessage.className = 'bg-red-50 text-red-700 border border-red-200';
+          formMessage.textContent = 'Error: ' + result.message;
+        }
+
+        formMessage.classList.remove('hidden');
+      } catch (error) {
+        formMessage.className = 'bg-red-50 text-red-700 border border-red-200';
+        formMessage.textContent = 'Error sending message. Please try again.';
+        formMessage.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    });
+  </script>

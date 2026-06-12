@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Loan Prediction Report</title>
+    <style>
+        body {
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+            background: #f8fafc;
+            color: #0f172a;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .paper {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 18px;
+            letter-spacing: -0.2px;
+        }
+
+        .meta {
+            color: #475569;
+            font-size: 12px;
+        }
+
+        .site-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .info-card {
+            background: #f8fafc;
+            border: 1px solid #eef2ff;
+            padding: 14px;
+            border-radius: 12px;
+            color: #334155;
+        }
+
+        .info-card .label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .info-card .value {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0f172a;
+        }
+
+        .result-card {
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #ffffff, #fbfbff);
+            border: 1px solid #e6e9ff;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .result-value {
+            font-weight: 800;
+            font-size: 18px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            color: #fff;
+        }
+
+        .approved {
+            background: #16a34a;
+        }
+
+        .rejected {
+            background: #ef4444;
+        }
+
+        .reasons {
+            margin-top: 14px;
+            font-size: 13px;
+            color: #334155;
+        }
+
+        .footer {
+            margin-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .members {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .member {
+            background: #fff;
+            border: 1px solid #eef2ff;
+            padding: 10px 12px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .member .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* ensure one report per printed page */
+        .report {
+            page-break-after: always;
+        }
+
+        .report:last-child {
+            page-break-after: auto;
+        }
+
+        @media print {
+            .paper {
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+
+<body data-auto-download="{{ 'true' if auto_download else 'false' }}">
+    <!--
+    Usage:
+    - Render this template from Flask passing variables: title, date, approved_count, rejected_count, total_count, decision, score, reasons (list), members (list of {name, role}).
+    - Set `auto_download=True` when rendering to immediately trigger html2pdf download on load.
+  -->
+
+    <div id="pdf-root">
+        {# Expect `entries` to be a list of history entries or a single-entry list #}
+        {% for e in entries %}
+        <div class="paper report">
+            <div class="header">
+                <div class="brand" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 15c3.2-6.4 5.9-9.6 8-9.6S16.8 8.6 20 15" stroke="white" stroke-width="1.9"
+                            stroke-linecap="round" />
+                        <path d="M7 10.5c1.2-3 3-4.7 5-4.7s3.8 1.7 5 4.7" stroke="white" stroke-width="1.9"
+                            stroke-linecap="round" opacity="0.9" />
+                    </svg>
+                </div>
+                <div>
+                    <h1>Loan Prediction Report</h1>
+                    <div class="meta">Generated: {{ generated_at if generated_at else now() }}</div>
+                </div>
+            </div>
+
+            <div class="site-info">
+                <div class="info-card">
+                    <div class="label">Model</div>
+                    <div class="value">{{ site_algorithm }}</div>
+                </div>
+                <div class="info-card">
+                    <div class="label">Accuracy</div>
+                    <div class="value">{{ site_accuracy }}</div>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div style="flex:1">
+                    <div style="font-size:13px; color:#64748b;">Application</div>
+                    <div style="font-weight:700; font-size:16px; color:#0f172a">ID: {{ e.application_id }}</div>
+                    <div style="font-size:13px; color:#475569; margin-top:6px">Submitted: {{ e.submitted_at }}</div>
+                </div>
+                <div>
+                    {% set dec = e.decision or e.result or '' %}
+                    {% if dec and ('approved' in dec|lower) %}
+                    <div class="result-value approved">✓ Approved</div>
+                    {% elif dec and ('reject' in dec|lower) %}
+                    <div class="result-value rejected">✗ Rejected</div>
+                    {% else %}
+                    <div class="result-value" style="background:#6b7280;">{{ dec or 'Decision' }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div>
+                    <p class="meta" style="margin:0 0 6px 0;">Personal</p>
+                    <div style="font-size:13px; color:#334155;">
+                        <div>Age: {{ e.form.get('age','') }}</div>
+                        <div>Gender: {{ e.form.get('gender','') }}</div>
+                        <div>Marital Status: {{ e.form.get('marital_status','') }}</div>
+                        <div>Dependents: {{ e.form.get('dependents','') }}</div>
+                        <div>Education: {{ e.form.get('education','') }}</div>
+                    </div>
+                </div>
+                <div>
+                    <p class="meta" style="margin:0 0 6px 0;">Financial</p>
+                    <div style="font-size:13px; color:#334155;">
+                        <div>Annual Income: {{ e.form.get('annual_income','') }}</div>
+                        <div>Monthly Expenses: {{ e.form.get('monthly_expenses','') }}</div>
+                        <div>Outstanding Debt: {{ e.form.get('outstanding_debt','') }}</div>
+                        <div>Existing Loans: {{ e.form.get('existing_loans','') }}</div>
+                        <div>Total Existing Loan Amount: {{ e.form.get('total_existing_loan_amount','') }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div>
+                    <p class="meta" style="margin:0 0 6px 0;">Loan Details</p>
+                    <div style="font-size:13px; color:#334155;">
+                        <div>Loan Amount: {{ e.form.get('loan_amount','') }}</div>
+                        <div>Loan Term: {{ e.form.get('loan_term','') }}</div>
+                        <div>Loan Purpose: {{ e.form.get('loan_purpose','') }}</div>
+                        <div>Loan Type: {{ e.form.get('loan_type','') }}</div>
+                        <div>Credit Score / Range: {{ e.form.get('credit_score','') }}</div>
+                    </div>
+                </div>
+                <div>
+                    <p class="meta" style="margin:0 0 6px 0;">Model</p>
+                    <div style="font-size:13px; color:#334155;">
+                        <div>Score: {{ e.score if e.score is defined else '' }}</div>
+                        <div>Prediction Time: {{ e.submitted_at }}</div>
+                        <div>Application ID: {{ e.application_id }}</div>
+                    </div>
+                </div>
+            </div>
+
+            {% if e.reasons %}
+            <div class="reasons">
+                <strong>Reasons / Model Notes</strong>
+                <ol>
+                    {% for r in e.reasons %}
+                    <li>{{ r }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            {% endif %}
+
+            {% if members %}
+            <div class="members">
+                {% for m in members %}
+                <div class="member">
+                    <div class="avatar">{{ m.name[0]|upper }}</div>
+                    <div>
+                        <div style="font-weight:700">{{ m.name }}</div>
+                        <div style="font-size:12px; color:#64748b">{{ m.role if m.role else 'Contributor' }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="footer">
+                <div>Loan Prediction · Machine Learning</div>
+                <div>© {{ year if year else '2026' }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script>
+        // If rendered with `auto_download=True`, auto-run html2pdf
+        (function () {
+            var auto = false;
+            try {
+                auto = document.body.getAttribute('data-auto-download') === 'true';
+            } catch (e) {
+                auto = false;
+            }
+            if (auto) {
+                var element = document.getElementById('pdf-root');
+                var opt = {
+                    margin: [6, 6, 6, 6],
+                    filename: ("loan-report-" + (new Date()).toISOString().slice(0, 10) + ".pdf"),
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                // small delay to allow fonts/images to render
+                setTimeout(function () { html2pdf().set(opt).from(element).save(); }, 350);
+            }
+        })();
+    </script>
+</body>
+
+</html>
